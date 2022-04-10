@@ -1,4 +1,4 @@
-# ddu-source-coc-locations
+# ddu-source-coc
 
-coc.nvim location source for ddu.vim.  
-This source only supports coc-location now. Other feature like coc-symbols will be supported in the future.
+coc.nvim source for ddu.vim.  
+coc-locations and coc-symbols features are available.

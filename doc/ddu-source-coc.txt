@@ -1,4 +1,4 @@
-*ddu-source-coc.txt*	coc.nvim location source for ddu.vim
+*ddu-source-coc.txt*	coc.nvim source for ddu.vim
 
 Author: Kodai Kabasawa <kabaaa1126@gmail.com>
 License: MIT license
