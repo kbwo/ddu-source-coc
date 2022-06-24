@@ -14,7 +14,7 @@ Params          |ddu-source-coc-params|
 ==============================================================================
 INTRODUCTION                                         *ddu-source-coc-introduction*
 
-This source collects vim coc.
+This source collects coc.nvim location data or symbols
 
 ==============================================================================
 INSTALL                                                   *ddu-source-coc-install*
