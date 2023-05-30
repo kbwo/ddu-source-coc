@@ -1,4 +1,3 @@
-// deno-lint-ignore-file require-await camelcase
 import {
   BaseSource,
   Item,
@@ -53,19 +52,16 @@ export class Source extends BaseSource<Params> {
             ? l.filename.replace(currentWorkingDir, "")
             : l.filename;
           return {
-            word: pathText + "   " + l.text,
+            word: pathText,
+            display: `${l.filename}:${l.lnum}:${l.col} ${l.text}`,
             action: {
               path: l.filename,
               col: l.col,
-              bufNr: l.bufnr,
-              text: l.text,
               lineNr: l.lnum,
             },
           };
         });
-        if (items.length) {
-          controller.enqueue(items);
-        }
+        controller.enqueue(items);
         controller.close();
       },
     });
