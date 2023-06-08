@@ -53,7 +53,7 @@ export class Source extends BaseSource<Params> {
             : l.filename;
           return {
             word: pathText,
-            display: `${l.filename}:${l.lnum}:${l.col} ${l.text}`,
+            display: `${pathText}:${l.lnum}:${l.col} ${l.text}`,
             action: {
               path: l.filename,
               col: l.col,
