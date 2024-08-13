@@ -1,10 +1,6 @@
-import {
-  BaseSource,
-  Item,
-  SourceOptions,
-} from "https://deno.land/x/ddu_vim@v1.8.0/types.ts";
-import { Denops } from "https://deno.land/x/ddu_vim@v1.2.0/deps.ts";
-import { ActionData } from "https://deno.land/x/ddu_kind_file@v0.2.0/file.ts";
+import { Denops } from "jsr:@denops/core@^7.0.0/type";
+import { SourceOptions, BaseSource, Item } from "jsr:@shougo/ddu-vim/types";
+import { ActionData } from "./types.ts";
 
 type Params = {
   symbols: SymbolData[];
@@ -42,16 +38,15 @@ type SymbolData = {
 export class Source extends BaseSource<Params> {
   kind = "file";
 
-  gather(
-    { sourceParams }: Args,
-  ): ReadableStream<Item<ActionData>[]> {
+  gather({ sourceParams, denops }: Args): ReadableStream<Item<ActionData>[]> {
     return new ReadableStream({
-      start(controller) {
-        // from b78a3a7ca532a95980a4ed779c8eba77362aff12 commit in ddu.vim, below code has been not working.
-        // await denops.call('CocAction', 'documentSymbols')
-        const cocSymbols: SymbolData[] = sourceParams.symbols;
+      async start(controller) {
+        const cocSymbols = (await denops.call(
+          "CocAction",
+          "documentSymbols"
+        )) as SymbolData[];
         const blank = "    ";
-        const currentFullPath = sourceParams.filePath;
+        const currentFullPath = (await denops.call("expand", "%:p")) as string;
         const items: Item<ActionData>[] = cocSymbols.map((l) => {
           return {
             word: `${l.lnum}:${l.kind}${blank}${l.text}`,
