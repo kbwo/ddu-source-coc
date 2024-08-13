@@ -33,7 +33,7 @@ EXAMPLES                                                 *ddu-source-coc-example
   " Add command for coc-symbols list with ddu
   command! Symbols call ddu#start({
       \   'ui': 'ff',
-      \   'sources': [{'name': 'coc-symbols', 'params': {'symbols': g:CocAction('documentSymbols'), 'filePath': expand('%:p')}}],
+      \   'sources': [{'name': 'coc-symbols'}],
       \   'sourceOptions': {
       \   },
       \   'kindOptions': {

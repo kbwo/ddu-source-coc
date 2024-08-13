@@ -3,6 +3,7 @@ import { globals } from "https://jsr.io/@denops/std/7.0.0/variable/variable.ts";
 import { fn } from "https://jsr.io/@shougo/ddu-vim/5.0.0/denops/ddu/deps.ts";
 import { SourceOptions, BaseSource, Item } from "jsr:@shougo/ddu-vim/types";
 import { ActionData } from "./types.ts";
+import { relative } from "jsr:@std/path@^1.0.2/relative";
 
 type Params = Record<never, never>;
 
@@ -40,11 +41,9 @@ export class Source extends BaseSource<Params> {
       async start(controller) {
         const cocJumpLocations: LocationData[] =
           (await globals.get(denops, "coc_jump_locations")) ?? [];
-        const currentWorkingDir = (await fn.getcwd(denops)) as string;
+        const cwd = (await fn.getcwd(denops)) as string;
         const items: Item<ActionData>[] = cocJumpLocations.map((l) => {
-          const pathText = l.filename.includes(currentWorkingDir)
-            ? l.filename.replace(currentWorkingDir, "")
-            : l.filename;
+          const pathText = relative(cwd, l.filename);
           return {
             word: pathText,
             display: `${pathText}:${l.lnum}:${l.col} ${l.text}`,
