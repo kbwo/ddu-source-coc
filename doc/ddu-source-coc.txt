@@ -36,11 +36,13 @@ EXAMPLES                                                 *ddu-source-coc-example
       \   'sources': [{'name': 'coc-symbols'}],
       \   'sourceOptions': {
       \   },
-      \   'kindOptions': {
-      \     'file': {
-      \       'defaultAction': 'open',
-      \     },
-      \   }
+      \ })
+  " Add command for coc-diagnostics list with ddu
+  command! Diagnostics call ddu#start({
+      \   'ui': 'ff',
+      \   'sources': [{'name': 'coc-diagnostics'}],
+      \   'sourceOptions': {
+      \   },
       \ })
 
   " Start ddu for coc-location. Coc.nvim feature like references, difinition
