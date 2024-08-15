@@ -1,5 +1,10 @@
 import { Denops } from "jsr:@denops/core@^7.0.0/type";
-import { SourceOptions, BaseSource, Item } from "jsr:@shougo/ddu-vim/types";
+import {
+  SourceOptions,
+  BaseSource,
+  Item,
+  ItemHighlight,
+} from "jsr:@shougo/ddu-vim/types";
 import { ActionData } from "./types.ts";
 
 type Params = {
@@ -38,24 +43,33 @@ type SymbolData = {
 export class Source extends BaseSource<Params> {
   kind = "file";
 
-  gather({ sourceParams, denops }: Args): ReadableStream<Item<ActionData>[]> {
+  gather({ denops }: Args): ReadableStream<Item<ActionData>[]> {
     return new ReadableStream({
       async start(controller) {
         const cocSymbols = (await denops.call(
           "CocAction",
           "documentSymbols"
         )) as SymbolData[];
-        const blank = "    ";
         const currentFullPath = (await denops.call("expand", "%:p")) as string;
-        const items: Item<ActionData>[] = cocSymbols.map((l) => {
+        const items: Item<ActionData>[] = cocSymbols.map((s) => {
+          const contents = s.text.replace(/^\s+/, "");
+          const prefix = `${s.lnum}:${s.kind}`;
           return {
-            word: `${l.lnum}:${l.kind}${blank}${l.text}`,
+            word: `${prefix} ${contents}`,
             action: {
               path: currentFullPath,
-              col: l.col,
-              text: l.text,
-              lineNr: l.lnum,
+              col: s.col,
+              text: s.text,
+              lineNr: s.lnum,
             },
+            highlights: [
+              {
+                name: "RelativePath",
+                hl_group: "CocListPath",
+                col: 1,
+                width: prefix.length + 1,
+              },
+            ] as ItemHighlight[],
           };
         });
         if (items.length) {
