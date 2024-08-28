@@ -25,25 +25,81 @@ https://github.com/Shougo/ddu.vim
 https://github.com/vim-denops/denops.vim
 https://github.com/Shougo/ddu-kind-file
 
+
+To use the outline feature, create a JavaScript file named `coc-outline.js`
+in the folder `$VIMCONFIG/coc-extensions` and paste the following code into it.
+
+>
+  const { CancellationTokenSource, workspace, languages } = require("coc.nvim");
+
+  const DEBOUNCE_DELAY = 100;
+
+  exports.activate = (_context) => {
+    const nvim = workspace.nvim;
+    const updateDocumentSymbols = async () => {
+      const symbols = await getFullDocumentSymbols();
+      await nvim.setVar("FullDocumentSymbols", JSON.stringify(symbols));
+    };
+    const requestHandler = new RequestHandler(DEBOUNCE_DELAY);
+    workspace.onDidOpenTextDocument(async () => {
+      await updateDocumentSymbols();
+    });
+    workspace.onDidChangeTextDocument(async () => {
+      requestHandler.debounceRequest(async () => {
+	await updateDocumentSymbols();
+      });
+    });
+    workspace.onDidCloseTextDocument(async () => {
+      await updateDocumentSymbols();
+    });
+    // TODO: Consider using a more efficient approach than setInterval for updating document symbols
+    setInterval(async () => {
+      try {
+	await updateDocumentSymbols();
+      } catch (error) {
+	console.error("Failed to update document symbols:", error);
+      }
+    }, DEBOUNCE_DELAY);
+  };
+
+  class RequestHandler {
+    timeoutId = null;
+    delay;
+
+    constructor(delay) {
+      this.delay = delay;
+    }
+
+    debounceRequest(callback) {
+      if (this.timeoutId !== null) {
+	clearTimeout(this.timeoutId);
+      }
+
+      this.timeoutId = setTimeout(() => {
+	callback();
+	this.timeoutId = null;
+      }, this.delay);
+    }
+  }
+
+  async function getFullDocumentSymbols() {
+    const document = await workspace.document;
+    const source = new CancellationTokenSource();
+    const token = source.token;
+    return languages.getDocumentSymbol(document.textDocument, token);
+  }
+
+
+
 ==============================================================================
 EXAMPLES                                                 *ddu-source-coc-examples*
 
 >
 
   " Add command for coc-symbols list with ddu
-  command! Symbols call ddu#start({
-      \   'ui': 'ff',
-      \   'sources': [{'name': 'coc-symbols'}],
-      \   'sourceOptions': {
-      \   },
-      \ })
+  command! Symbols call ddu#start({ 'sources': [{'name': 'coc-symbols'}] })
   " Add command for coc-diagnostics list with ddu
-  command! Diagnostics call ddu#start({
-      \   'ui': 'ff',
-      \   'sources': [{'name': 'coc-diagnostics'}],
-      \   'sourceOptions': {
-      \   },
-      \ })
+  command! Outline call ddu#start({ 'uiParams': {'ff': {'displayTree': v:true}}, 'sources': [{'name': 'coc-outline'}] })
 
   " Start ddu for coc-location. Coc.nvim feature like references, difinition
   with ddu will be available.
