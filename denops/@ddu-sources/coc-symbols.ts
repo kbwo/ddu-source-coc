@@ -1,10 +1,10 @@
 import { Denops } from "jsr:@denops/core@^7.0.0/type";
 import {
   SourceOptions,
-  BaseSource,
   Item,
   ItemHighlight,
-} from "jsr:@shougo/ddu-vim/types";
+} from "jsr:@shougo/ddu-vim@~6.1.0/types";
+import { BaseSource } from "jsr:@shougo/ddu-vim@~6.1.0/source";
 import { ActionData } from "./types.ts";
 
 type Params = {

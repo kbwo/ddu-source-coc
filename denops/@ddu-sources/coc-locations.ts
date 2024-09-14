@@ -3,10 +3,10 @@ import { globals } from "https://jsr.io/@denops/std/7.0.0/variable/variable.ts";
 import { fn } from "https://jsr.io/@shougo/ddu-vim/5.0.0/denops/ddu/deps.ts";
 import {
   SourceOptions,
-  BaseSource,
   Item,
   ItemHighlight,
-} from "jsr:@shougo/ddu-vim/types";
+} from "jsr:@shougo/ddu-vim@~6.1.0/types";
+import { BaseSource } from "jsr:@shougo/ddu-vim@~6.1.0/source";
 import { ActionData } from "./types.ts";
 import { relative } from "jsr:@std/path@^1.0.2/relative";
 

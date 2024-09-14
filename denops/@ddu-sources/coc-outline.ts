@@ -1,5 +1,6 @@
 import { Denops } from "jsr:@denops/core@^7.0.0/type";
-import { SourceOptions, BaseSource, Item } from "jsr:@shougo/ddu-vim/types";
+import { SourceOptions, Item } from "jsr:@shougo/ddu-vim@~6.1.0/types";
+import { BaseSource } from "jsr:@shougo/ddu-vim@~6.1.0/source";
 import { ActionData } from "./types.ts";
 import { globals } from "https://jsr.io/@denops/std/7.0.0/variable/variable.ts";
 
