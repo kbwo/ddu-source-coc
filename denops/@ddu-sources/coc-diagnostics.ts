@@ -1,13 +1,9 @@
 import { Denops } from "jsr:@denops/core@^7.0.0/type";
-import {
-  SourceOptions,
-  BaseSource,
-  Item,
-  ItemHighlight,
-} from "jsr:@shougo/ddu-vim/types";
+import { SourceOptions, Item, ItemHighlight } from "jsr:@shougo/ddu-vim/types";
 import { ActionData } from "./types.ts";
 import { relative } from "jsr:@std/path@^1.0.2/relative";
-import { fn } from "https://jsr.io/@shougo/ddu-vim/5.0.0/denops/ddu/deps.ts";
+import { BaseSource } from "jsr:@shougo/ddu-vim@~6.1.0/source";
+import * as fn from "jsr:@denops/std/function";
 
 type Params = Record<never, never>;
 
